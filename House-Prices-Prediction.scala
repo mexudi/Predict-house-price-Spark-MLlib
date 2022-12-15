@@ -85,9 +85,53 @@ predDF.select("bedrooms", "features", "price", "prediction").show(10)
 // COMMAND ----------
 
 // MAGIC %md
-// MAGIC ## Conclusion
-// MAGIC In this code we built a model using only a single feature, bedrooms. However, you may want to build a model using all of your features, some of which may be categorical.
+// MAGIC ## Evaluate the model using evaluators
+// MAGIC I will try to evaluate my Linear Regression model using RegressionEvaluator(). I will compare the four possible metrics for this evaluator:
+// MAGIC * RMSE: Root Mean Squared Error
+// MAGIC * MSE: Mean Squared Error
+// MAGIC * R2: R-Squared
+// MAGIC * MAE: Mean Absolute Error
 
 // COMMAND ----------
 
+import org.apache.spark.ml.evaluation.RegressionEvaluator
 
+//Root Mean Squared Error
+val evaluatorRMSE = new RegressionEvaluator()
+  .setLabelCol("price")
+  .setPredictionCol("prediction")
+  .setMetricName("rmse");
+val rmse = evaluatorRMSE.evaluate(predDF);
+
+//Mean Squared Error
+val evaluatorMSE = new RegressionEvaluator()
+  .setLabelCol("price")
+  .setPredictionCol("prediction")
+  .setMetricName("mse");
+val mse = evaluatorMSE.evaluate(predDF);
+
+//Regression through the origin
+val evaluatorR2 = new RegressionEvaluator()
+  .setLabelCol("price")
+  .setPredictionCol("prediction")
+  .setMetricName("r2");
+val r2 = evaluatorR2.evaluate(predDF);
+
+//Mean absolute error
+val evaluatorMAE = new RegressionEvaluator()
+  .setLabelCol("price")
+  .setPredictionCol("prediction")
+  .setMetricName("mae");
+val mae = evaluatorMAE.evaluate(predDF);
+
+
+print("Root Mean Squared Error (RMSE) on test data = " + rmse);
+print("Mean squared error (MSE) on test data = " + mse);
+print("Regression through the origin(R2) on test data = " + r2);
+print("Mean absolute error (MAE) on test data = " + mae);
+
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC ## Conclusion
+// MAGIC In this code we built a model using only a single feature, bedrooms. However, you may want to build a model using all of your features, some of which may be categorical.
